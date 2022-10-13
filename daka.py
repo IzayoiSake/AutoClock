@@ -1,5 +1,6 @@
 from lib2to3.pgen2 import driver
 from opcode import HAVE_ARGUMENT
+from turtle import end_fill
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from chaojiying import Chaojiying_Client
@@ -191,18 +192,28 @@ class AutoDaka:
         # 弹出的确认提交窗口，点击确定
         try:
             # 寻找<div class="wapcf-btn wapcf-btn-ok">确认提交</div>的按钮
-            submit=driver.find_element(by=By.CLASS_NAME, value="wapcf-btn-ok")
-            submit = WebDriverWait(driver, 10).until(
+            submit=driver.find_element(by=By.ID, value="wapcf")
+            submit=submit.find_element(by=By.CLASS_NAME, value="wapcf-inner")
+            submitTitle=submit.find_element(by=By.CLASS_NAME, value="wapcf-title")
+            if submitTitle.text=="每天只能填报一次，请确认信息是否全部正确？":
+                submit=submit.find_element(by=By.CLASS_NAME, value="wapcf-btn-box")
+                submit=submit.find_element(by=By.CLASS_NAME, value="wapcf-btn-ok")
+                submit = WebDriverWait(driver, 10).until(
                             EC.element_to_be_clickable(submit))
-            submit.click()
-            print("确认提交")
-            self.Reminder("今天的打卡完成了🚌，耶！")
+                submit.click()
+                print("确认提交")
+                self.Reminder("今天的打卡完成了🚌，耶！")
+            else:
+                raise Exception("")
         except:
             try:
                 # 寻找<div class="wapat-title">每天只能填报一次，你已提交过</div>的按钮
                 HaveSubmitted=driver.find_element(by=By.CLASS_NAME, value="wapat-title")
-                print('您今天已提交过.\n')
-                self.Reminder("您今天已提交过")
+                if HaveSubmitted.text=="每天只能填报一次，你已提交过":
+                    print('您今天已提交过.\n')
+                    self.Reminder("您今天已提交过")
+                else:
+                    raise Exception("")
             except Exception as error:
                 print('提交失败.\n')
                 self.Reminder("提交失败,请注意")
@@ -285,8 +296,8 @@ if __name__ == "__main__":
     定位地点的经纬度
     """
     url = "https://healthreport.zju.edu.cn/ncov/wap/default/index"
-    account = os.getenv("account")
-    password = os.getenv("password")
+    account = os.getenv("account")#os.getenv("account")
+    password = os.getenv("password")#os.getenv("password")
     latitude = 30.27  # 虚拟位置纬度
     longitude = 120.13  # 经度
     daka = AutoDaka(url, account, password, latitude, longitude)
