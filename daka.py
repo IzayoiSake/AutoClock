@@ -105,6 +105,7 @@ class AutoDaka:
                  'commit': '/html/body/div[1]/div[1]/div/section/div[4]/ul/li[28]/div/div/div/span[1]', # commit 
                  }
 
+<<<<<<< HEAD
         for form in forms:
             self.click_by_xpath(driver, form, forms[form])
 
@@ -114,6 +115,115 @@ class AutoDaka:
         # 提交表单
         submit_xpath = '/html/body/div[1]/div[1]/div/section/div[5]/div/a'
         self.click_by_xpath(driver, 'submit', submit_xpath, submit=True)
+=======
+        print("在校信息填写中...")
+        # 是否在校
+        try:
+            inSchool = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[1]/div/section/div[4]/ul/li[4]/div/div/div[1]/span[1]")))
+            inSchool.click()
+        except Exception as error:
+            print('write inSchool Information wrong...\n', error)
+        time.sleep(1)
+
+        # 是否在实习
+        print("实习信息填写中...")
+        try:
+            inPractice =  WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[1]/div/section/div[4]/ul/li[7]/div/div/div[3]/span[1]")))
+            inPractice.click()
+            print("实习信息已提交")
+        except Exception as error:
+            print('write inPractice Information wrong...\n', error)
+        
+        #print("基本信息填写中...")
+        print("在校信息填写中...")
+        # 是否在校
+        try:
+            inSchool=driver.find_element(by=By.NAME,value="sfzx")
+            inSchoolOption=inSchool.find_element(by=By.TAG_NAME, value="div").find_elements(by=By.TAG_NAME, value="div")
+            inSchoolYes=WebDriverWait(driver, 10).until(EC.element_to_be_clickable(inSchoolOption[0]))
+            inSchoolYes.click()
+            Campus=driver.find_element(by=By.NAME,value="campus")
+            CampusOption=Campus.find_element(by=By.TAG_NAME, value="div").find_elements(by=By.TAG_NAME, value="div")
+            CampusYuquan=WebDriverWait(driver, 10).until(EC.element_to_be_clickable(CampusOption[1]))
+            CampusYuquan.click()
+            
+        except Exception as error:
+            print("在校信息填写异常\n", error)
+        time.sleep(1)
+
+        # 是否在实习
+        print("实习信息填写中...")
+        try:
+            internship=driver.find_element(by=By.NAME,value="internship")
+            internshipOption=internship.find_element(by=By.TAG_NAME, value="div").find_elements(by=By.TAG_NAME, value="div")
+            internshipNo=WebDriverWait(driver, 10).until(EC.element_to_be_clickable(internshipOption[2]))
+            internshipNo.click()
+            print("实习信息已提交")
+        except Exception as error:
+            print("实习信息填写异常\n", error)
+        time.sleep(1)
+
+        # 位置填写
+        print("位置信息填写中...")
+
+        try:  # 提交位置信息
+            area_element = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "/html/body/div[1]/div[1]/div/section/div[4]/ul/li[10]/div/input"))
+            )
+            area_element.click()
+            print("地理位置信息已提交")
+        except Exception as error:
+            print("地理位置信息填写异常\n", error)
+
+        time.sleep(3)
+
+        #健康码信息
+        print("健康码信息填写中...")
+
+        try:  # 提交健康码信息
+            HealthCode=driver.find_element(by=By.NAME,value="sqhzjkkys")
+            HealthCodeOption=HealthCode.find_element(by=By.TAG_NAME, value="div").find_elements(by=By.TAG_NAME, value="div")
+            GreenCode=WebDriverWait(driver, 10).until(EC.element_to_be_clickable(HealthCodeOption[0]))
+            GreenCode.click()
+            print("健康码信息填写已提交")
+        except Exception as error:
+            print("健康码信息填写异常\n", error)
+
+
+
+        #同住人员信息
+        print("同住人员信息填写中...")
+
+        try:  # 提交同住人员信息
+            RoomMate=driver.find_element(by=By.NAME,value="sfymqjczrj")
+            RoomMateOption=RoomMate.find_element(by=By.TAG_NAME, value="div").find_elements(by=By.TAG_NAME, value="div")
+            # 在RoomMateOption中寻找元素<span>否 No</span>
+            RoomMateNo=WebDriverWait(driver, 10).until(EC.element_to_be_clickable(RoomMateOption[1]))
+            RoomMateNo.click()
+            print("同住人员信息填写已提交")
+        except Exception as error:
+            print("同住人员信息填写异常\n", error)
+
+        time.sleep(3)
+        
+        # 本人承诺
+        try:
+            Commit=driver.find_element(by=By.NAME,value="sfqrxxss")
+            CommitYes=Commit.find_element(by=By.TAG_NAME, value="div").find_element(by=By.TAG_NAME, value="div")
+            CommitYes.click()
+        except Exception as error:
+            print("承诺失败\n", error)
+
+        time.sleep(1)
+        
+        # 提交信息
+        driver.find_element(by=By.XPATH, 
+                            value="/html/body/div[1]/div[1]/div/section/div[5]/div/a").click()
+
+>>>>>>> parent of 1fba632 ('填写地理位置'等项的路径依赖修改为类名称依赖)
         time.sleep(2)
 
         # 弹出的确认提交窗口，点击确定
